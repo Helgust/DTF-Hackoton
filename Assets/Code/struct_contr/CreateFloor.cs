@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CreateFloor : MonoBehaviour {
 	
-	[SerializeField] private GameObject floor;
+	//[SerializeField] private GameObject floor;
+	[SerializeField] private GameObject[] floor;
 	//[SerializeField] public GameObject Player;
 	///[SerializeField] private GameObject floor;
 	private float speed = 3.0f;
@@ -37,12 +38,22 @@ public class CreateFloor : MonoBehaviour {
 	
 	public void FuncCreateFloor(GameObject obj1){
 		if (obj1 != null){
-			_flor1 = Instantiate(floor) as GameObject;
-			float y1 = Random.Range(10, 25);
-			float z1 = Random.Range(20, 35);
+			//int contr = Random.Range(0, 1);
+		//	switch (contr)
+				//case 0:
+				//case 1:
+				///case 2:
+				//case 3:
+				//case 4:
+			_flor1 = Instantiate(floor[0]) as GameObject;
+			float y1 = Random.Range(15, 25);
+			float z1 = Random.Range(20, 30);
 			float x1 = Random.Range(-15, 15);
 			_flor1.transform.position = new Vector3(x1, obj1.transform.position.y-y1, obj1.transform.position.z+z1);
 			float angle = Random.Range(0, 360);
+			//float z2 = Random.Range(15, 25);
+			//float x2 = Random.Range(15, 25);
+			//_flor1.transform.localScale = new Vector3(x2,1,z2);
 			_flor1.transform.Rotate(0, angle, 0);
 			key++;
 		}

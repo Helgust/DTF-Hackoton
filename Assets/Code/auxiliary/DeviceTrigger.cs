@@ -9,8 +9,10 @@ public class DeviceTrigger : MonoBehaviour {
 	[SerializeField] private GameObject Player;
 	//[SerializeField] public GameObject predFloor;
 	private CreateFloor target;
-	float angle = 0;
-	int localKey = 0;
+	private float angle = 0;
+	private int localKey = 0;
+	private int localKeyColor = 0;
+	private float localKeyVert = 0;
 	
 	void OnTriggerEnter(Collider other){
 		//foreach (GameObject target in targets){
@@ -24,15 +26,22 @@ public class DeviceTrigger : MonoBehaviour {
 			target.FuncCreateFloor(this.gameObject);//, predFloor);
 			localKey++;
 		}
-		Player.transform.parent = transform;
-		if (target.key!=1)
+		localKeyColor = 1;
+		if (!(localKeyVert>0))
+			Player.transform.parent = transform;
+		//Player.transform.localScale = new Vector3(3*transform.localScale.x/20,3,3*transform.localScale.z/20);
+		//Debug.Log(transform.localScale.x);
+		if (target.key!=1){
 			OnDie();
+			//localKeyVert = Random.Range(-1, 1);
+		}
 		//}
 	}
 	
 	private void OnTriggerExit(Collider other)
 	{
 		Player.transform.parent = null;
+		Player.transform.localScale = new Vector3(3,3,3);
 	}
 	
 	public void OnDie(){
@@ -40,7 +49,8 @@ public class DeviceTrigger : MonoBehaviour {
 	}
 	
 	private IEnumerator Die(){
-		yield return new WaitForSeconds(5.5f);
+		yield return new WaitForSeconds(15.5f);
+		Player.transform.parent = null;
 		Destroy(this.gameObject);
 	}
 	
@@ -51,6 +61,8 @@ public class DeviceTrigger : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		localKeyVert = Random.Range(-1, 2);
+		Debug.Log(localKeyVert);
 		target = Controller.GetComponent<CreateFloor>();
 		Color random = new Color(Random.Range(0f,1f), Random.Range(0f,1f), Random.Range(0f,1f));
 		if (target.key!=1)
@@ -58,10 +70,23 @@ public class DeviceTrigger : MonoBehaviour {
 	}
 		
 	void Update () {
+		if (localKeyVert>0){
+			if (angle == 0)
+				angle = Random.Range(-15, 15);
+			//if (angle < 1.0f)
+			transform.Rotate(1*angle*Time.deltaTime, 0, 0);
+		} else {
 		if (angle == 0)
-			angle = Random.Range(-3, 3);
-		//if (angle < 1.0f)
-			transform.Rotate(0, 1*angle, 0);
+				angle = Random.Range(-130, 130);
+			//if (angle < 1.0f)
+			transform.Rotate(0, 1*angle*Time.deltaTime, 0);
+		
+		}
+		/*if (localKeyColor !=0){
+			Color color = GetComponent<Renderer>().material.color;
+			color = new Color(color.r+((1-color.r)/17)*Time.deltaTime*Time.deltaTime, color.g-((color.g-0)/17)*Time.deltaTime*Time.deltaTime, color.b-((color.b-0)/17)*Time.deltaTime*Time.deltaTime);
+			GetComponent<Renderer>().material.color = color;
+		}*/
 		//else 
 		//	transform.Rotate(0, transform.Rotation.y-1, 0);
 	}
